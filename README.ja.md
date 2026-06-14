@@ -6,6 +6,12 @@
 
 ![Sidekick UI preview](docs/assets/sidekick-preview.svg)
 
+## デモ
+
+![Sidekick demo animation](docs/assets/sidekick-demo.gif)
+
+Sidekick が画面のすみで待機し、キャプチャ内容を読んで短い提案を返し、そのままチャットに広げるまでの動作イメージです。
+
 ## できること
 
 - 画面のすみに小さなオーバーレイを置き、作業や視聴の流れを邪魔しない短いひとことを受け取れます。

@@ -6,6 +6,12 @@
 
 ![Sidekick UI preview](docs/assets/sidekick-preview.svg)
 
+## Demo
+
+![Sidekick demo animation](docs/assets/sidekick-demo.gif)
+
+This is an illustrative demo of the main loop: Sidekick watches quietly, captures the current screen, returns a short suggestion, and lets you continue in chat.
+
 ## What It Does
 
 - Keeps a small overlay at the edge of your screen for short, low-friction reactions while you work, browse, watch, or play.
