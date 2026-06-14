@@ -4,8 +4,6 @@
 
 `Sidekick` is a macOS prototype that captures the current screen, extracts OCR text with Vision, and sends the result to a local LLM exposed through an OpenAI-compatible API such as LM Studio for both task support and companion-style feedback.
 
-![Sidekick UI preview](docs/assets/sidekick-preview.svg)
-
 ## Demo
 
 ![Sidekick demo animation](docs/assets/sidekick-demo.gif)

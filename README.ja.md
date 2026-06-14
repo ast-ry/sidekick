@@ -4,8 +4,6 @@
 
 `Sidekick` は macOS 向けのプロトタイプです。現在の画面をキャプチャし、`Vision` による OCR を実行し、その結果を LM Studio などの OpenAI 互換 API で公開されたローカル LLM に送って支援や伴走型フィードバックを返します。
 
-![Sidekick UI preview](docs/assets/sidekick-preview.svg)
-
 ## デモ
 
 ![Sidekick demo animation](docs/assets/sidekick-demo.gif)
