@@ -1,0 +1,26 @@
+<svg width="1200" height="720" viewBox="0 0 1200 720" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="720" rx="24" fill="#F3F1EA"/>
+  <rect x="70" y="58" width="1060" height="604" rx="24" fill="#202124"/>
+  <rect x="96" y="92" width="640" height="520" rx="12" fill="#2D2F33"/>
+  <rect x="122" y="124" width="560" height="32" rx="6" fill="#555A61"/>
+  <rect x="122" y="182" width="360" height="22" rx="5" fill="#454A51"/>
+  <rect x="122" y="226" width="510" height="22" rx="5" fill="#454A51"/>
+  <rect x="122" y="270" width="420" height="22" rx="5" fill="#454A51"/>
+  <rect x="122" y="356" width="300" height="124" rx="12" fill="#3B424B"/>
+  <rect x="446" y="356" width="210" height="124" rx="12" fill="#4A3E35"/>
+  <rect x="774" y="92" width="282" height="230" rx="24" fill="#F7F6F1"/>
+  <rect x="774" y="92" width="282" height="230" rx="24" stroke="#C8C0B5" stroke-width="2"/>
+  <circle cx="818" cy="135" r="21" fill="#F07C37"/>
+  <path d="M818 124l3.2 7.2 7.8 1.1-5.7 5.4 1.4 7.7-6.7-3.8-6.7 3.8 1.4-7.7-5.7-5.4 7.8-1.1L818 124z" fill="white"/>
+  <rect x="850" y="119" width="88" height="18" rx="4" fill="#262626"/>
+  <rect x="982" y="121" width="46" height="20" rx="10" fill="#E6F4E8"/>
+  <rect x="806" y="165" width="218" height="82" rx="14" fill="white"/>
+  <rect x="824" y="184" width="168" height="12" rx="3" fill="#D4773D"/>
+  <rect x="824" y="208" width="178" height="10" rx="3" fill="#56514B"/>
+  <rect x="824" y="228" width="128" height="10" rx="3" fill="#56514B"/>
+  <rect x="806" y="267" width="94" height="32" rx="16" fill="#ED733A"/>
+  <rect x="924" y="272" width="28" height="24" rx="12" fill="#F4EEE7"/>
+  <rect x="962" y="272" width="44" height="24" rx="12" fill="#F4EEE7"/>
+  <rect x="1016" y="272" width="28" height="24" rx="12" fill="#F4EEE7"/>
+  <text x="74" y="690" fill="#5F5A53" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="22">Sidekick overlay-first macOS companion prototype</text>
+</svg>
