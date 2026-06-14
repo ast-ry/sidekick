@@ -34,6 +34,35 @@ This is an illustrative demo of the main loop: Sidekick watches quietly, capture
 - Confirmed LM Studio version: `0.4.16+2 (0.4.16+2)`
 - Confirmed local model setup: `Gemma4-26b-a4b` through LM Studio
 
+## LM Studio Setup Example
+
+The confirmed setup uses LM Studio `0.4.16+2 (0.4.16+2)` with `Gemma4-26b-a4b` loaded and the OpenAI-compatible API server running on localhost.
+
+1. Launch LM Studio and download or select `Gemma4-26b-a4b`.
+2. Load the model in LM Studio's local server view.
+3. Start the OpenAI-compatible API server.
+4. Confirm that the server URL is `http://127.0.0.1:1234/v1`.
+5. Confirm that the loaded model can respond with image input. If it does not work, use the script in "LM Studio Troubleshooting" below to check whether `Responses` or `Chat Completions` works in your setup.
+
+Sidekick's default endpoint is `http://127.0.0.1:1234/v1/chat/completions`. If you change the host or port in LM Studio, update `Base URL` in Sidekick to match it.
+
+## Sidekick Settings After Launch
+
+After launching the app, open `Open Settings` from the Sidekick menu bar item, or open the dashboard and configure these fields.
+
+1. Open `Connection`.
+2. Set `Base URL` to the LM Studio endpoint. Usually this is `http://127.0.0.1:1234/v1/chat/completions`.
+3. Set `Model` to the model name loaded in LM Studio. In the confirmed setup, use `Gemma4-26b-a4b`.
+4. Set `API Format` to `Chat` first. If the troubleshooting script shows that only `Responses` works, switch it to `Responses`.
+5. Set `Interface Language` and `Output Language` to `Japanese` or `English` as needed.
+6. Open `Behavior` and set `Analysis Mode` to `Image only` or `OCR + Image`. These are usually the best fit for Gemma VLM setups.
+7. Leave `Capture Scope` as `Entire Display` for the first test. Switch to `Frontmost Window` if you only want Sidekick to see the active app window.
+8. Open `Diagnostics` and click `Capture Screen` to confirm that a preview appears.
+9. Click `Ask Sidekick` and confirm that LM Studio returns a response.
+10. If that works, click `Start Monitoring`.
+
+macOS Screen Recording permission is required on the first capture. After granting permission, relaunch Sidekick and try `Capture Screen` or `Ask Sidekick` again.
+
 ## Privacy And Data Handling
 
 Sidekick is screen-aware software. Use it with the same care you would use for screen sharing.
