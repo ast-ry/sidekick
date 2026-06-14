@@ -18,6 +18,24 @@ DMG を開き、`Sidekick.app` を `Applications` にドラッグしてインス
 
 Sidekick が画面のすみで待機し、キャプチャ内容を読んで短い提案を返し、そのままチャットに広げるまでの動作イメージです。
 
+## 動作イメージ
+
+```mermaid
+flowchart LR
+    screen["現在の画面<br/>前面ウィンドウまたはディスプレイ全体"]
+    capture["Sidekick がキャプチャ<br/>スクリーンショット + 必要に応じて OCR"]
+    context["文脈を整理<br/>画面変化、アプリ名、プロンプト"]
+    lmstudio["LM Studio / ローカル LLM<br/>OpenAI 互換 API"]
+    feedback["オーバーレイに表示<br/>短い提案や伴走コメント"]
+    chat["チャットで深掘り<br/>直近の話題から継続"]
+
+    screen --> capture --> context --> lmstudio --> feedback
+    feedback --> chat
+    chat --> lmstudio
+```
+
+Sidekick 自体は Mac 上で動きますが、キャプチャした画面文脈は設定した endpoint に送信されます。既定構成では、その送信先は localhost 上の LM Studio です。
+
 ## できること
 
 - 画面のすみに小さなオーバーレイを置き、作業や視聴の流れを邪魔しない短いひとことを受け取れます。

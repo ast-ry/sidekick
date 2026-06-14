@@ -18,6 +18,24 @@ Open the DMG and drag `Sidekick.app` to `Applications`. Sidekick is an early pro
 
 This is an illustrative demo of the main loop: Sidekick watches quietly, captures the current screen, returns a short suggestion, and lets you continue in chat.
 
+## How It Works
+
+```mermaid
+flowchart LR
+    screen["Current screen<br/>frontmost window or entire display"]
+    capture["Sidekick capture<br/>screenshot + optional OCR"]
+    context["Context builder<br/>screen change, app name, prompts"]
+    lmstudio["LM Studio / local LLM<br/>OpenAI-compatible API"]
+    feedback["Overlay feedback<br/>short suggestion or companion note"]
+    chat["Follow-up chat<br/>continue from recent feedback"]
+
+    screen --> capture --> context --> lmstudio --> feedback
+    feedback --> chat
+    chat --> lmstudio
+```
+
+Sidekick stays on your Mac, but the captured screen context is sent to the endpoint you configure. With the default setup, that endpoint is LM Studio on localhost.
+
 ## What It Does
 
 - Keeps a small overlay at the edge of your screen for short, low-friction reactions while you work, browse, watch, or play.
