@@ -5,7 +5,6 @@ import Vision
 
 enum ScreenCaptureService {
     struct CaptureResult {
-        let image: NSImage
         let cgImage: CGImage
         let pngData: Data
     }
@@ -37,7 +36,6 @@ enum ScreenCaptureService {
         }
 
         return CaptureResult(
-            image: NSImage(cgImage: cgImage, size: NSSize(width: cgImage.width, height: cgImage.height)),
             cgImage: cgImage,
             pngData: pngData
         )

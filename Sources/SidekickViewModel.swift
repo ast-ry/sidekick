@@ -1054,6 +1054,7 @@ final class SidekickViewModel: ObservableObject {
             extractedOCR = ""
         }
 
+        let previewImage = NSImage(cgImage: capture.cgImage, size: NSSize(width: capture.cgImage.width, height: capture.cgImage.height))
         let fingerprint = ImageFingerprint.hash(for: capture.cgImage)
         let observation = ScreenObservation(
             capturedAt: .now,
@@ -1064,7 +1065,7 @@ final class SidekickViewModel: ObservableObject {
         )
 
         return CapturedSnapshot(
-            image: capture.image,
+            image: previewImage,
             cgImage: capture.cgImage,
             pngData: capture.pngData,
             observation: observation
