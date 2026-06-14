@@ -4,6 +4,14 @@
 
 `Sidekick` は macOS 向けのプロトタイプです。現在の画面をキャプチャし、`Vision` による OCR を実行し、その結果を LM Studio などの OpenAI 互換 API で公開されたローカル LLM に送って支援や伴走型フィードバックを返します。
 
+## ダウンロード
+
+最新版の DMG は [GitHub Releases](https://github.com/ast-ry/sidekick/releases/latest) からダウンロードできます。直接ダウンロードする場合はこちらです。
+
+[Sidekick.dmg をダウンロード](https://github.com/ast-ry/sidekick/releases/latest/download/Sidekick.dmg)
+
+DMG を開き、`Sidekick.app` を `Applications` にドラッグしてインストールしてください。Sidekick はまだ初期プロトタイプで、現在は ad-hoc signing のため、初回起動時に macOS のセキュリティ警告が出る場合があります。
+
 ## デモ
 
 ![Sidekick demo animation](docs/assets/sidekick-demo.gif)
