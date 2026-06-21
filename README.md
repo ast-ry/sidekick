@@ -2,7 +2,9 @@
 
 [日本語 README](README.ja.md)
 
-`Sidekick` is a macOS prototype that captures the current screen, extracts OCR text with Vision, and sends the result to a local LLM exposed through an OpenAI-compatible API such as LM Studio for both task support and companion-style feedback.
+`Sidekick` is a desktop assistant that responds to what you are currently viewing on your Mac. It can suggest a next step when an error appears, react like someone watching alongside you during a video or game, and continue any interesting response as a chat.
+
+Screen understanding is provided by a local LLM running through LM Studio or another OpenAI-compatible endpoint.
 
 ## Download
 
@@ -16,40 +18,36 @@ Open the DMG and drag `Sidekick.app` to `Applications`. Sidekick is an early pro
 
 ![Sidekick demo animation](docs/assets/sidekick-demo.gif)
 
-This is an illustrative demo of the main loop: Sidekick watches quietly, captures the current screen, returns a short suggestion, and lets you continue in chat.
+Sidekick waits at the edge of the screen, provides a short response that fits the situation, and lets you continue that topic in chat.
 
 ## How It Works
 
 ```mermaid
 flowchart LR
-    screen["Current screen<br/>frontmost window or entire display"]
-    capture["Sidekick capture<br/>screenshot + optional OCR"]
-    context["Context builder<br/>screen change, app name, prompts"]
-    lmstudio["LM Studio / local LLM<br/>OpenAI-compatible API"]
-    feedback["Overlay feedback<br/>short suggestion or companion note"]
-    chat["Follow-up chat<br/>continue from recent feedback"]
+    screen["Work, watch, or play<br/>on your Mac"]
+    capture["Sidekick looks at<br/>the current screen"]
+    lmstudio["A local LLM creates<br/>a relevant response"]
+    feedback["A short message appears<br/>at the edge of the screen"]
+    chat["Continue in chat<br/>when you want more"]
 
-    screen --> capture --> context --> lmstudio --> feedback
+    screen --> capture --> lmstudio --> feedback
     feedback --> chat
     chat --> lmstudio
 ```
 
-Sidekick stays on your Mac, but the captured screen context is sent to the endpoint you configure. With the default setup, that endpoint is LM Studio on localhost.
+With the default setup, screen context is sent to LM Studio running on the same Mac. If you configure a remote API instead, screen information may leave your device.
 
 ## What It Does
 
-- Keeps a small overlay at the edge of your screen for short, low-friction reactions while you work, browse, watch, or play.
-- Notices visible errors or signs of being stuck and suggests a next step without forcing you into a full chat.
-- Can react like someone watching alongside you, with light commentary or short relevant tidbits for videos, streams, games, articles, and other screen content.
-- Lets you expand any interesting feedback item into a chat inside the same overlay.
-- Keeps up to five recent feedback items so you can browse back and resume a topic later.
-- Monitors quietly on an interval and becomes more concrete when the screen changes meaningfully.
-- Lets you choose how assertive it should be with `Auto`, `Assist`, `Companion`, and `Silent` modes.
-- Lets you tune the voice from calm to casual, quiet to chatty, or more tidbit-oriented.
-- Can focus on the frontmost window or the entire display.
-- Can use screenshots, OCR text, or both as context for a local model.
-- Separates the app UI language from the model response language.
-- Remembers endpoint, model, prompts, monitoring interval, and other settings across launches.
+Here are some typical ways to use it:
+
+- **When work gets stuck:** Sidekick can read visible errors, settings screens, or signs of a blocked workflow and suggest a short next step.
+- **While watching or playing:** It can add reactions, relevant background context, or small tidbits like someone watching alongside you.
+- **While you are focused:** It can wait quietly when little is changing and respond only when something looks worth mentioning.
+- **When you want more detail:** Continue directly from an overlay response into a chat that keeps the current screen context.
+- **When you want to revisit something:** Browse up to five recent feedback items and resume the selected topic.
+
+You can tune the experience with `Auto`, `Assist`, `Companion`, and `Silent` modes, as well as tone, response frequency, capture scope, screenshot/OCR input, and output language.
 
 ## Requirements
 
