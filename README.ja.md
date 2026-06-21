@@ -1,4 +1,4 @@
-# Sidekick プロトタイプ
+# Sidekick
 
 [English README](README.md)
 
@@ -12,7 +12,7 @@
 
 [Sidekick.dmg をダウンロード](https://github.com/ast-ry/sidekick/releases/latest/download/Sidekick.dmg)
 
-DMG を開き、`Sidekick.app` を `Applications` にドラッグしてインストールしてください。Sidekick はまだ初期プロトタイプで、現在は ad-hoc signing のため、初回起動時に macOS のセキュリティ警告が出る場合があります。
+DMG を開き、`Sidekick.app` を `Applications` にドラッグしてインストールしてください。現在は ad-hoc signing のため、初回起動時に macOS のセキュリティ警告が出る場合があります。
 
 ## デモ
 

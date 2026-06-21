@@ -1,4 +1,4 @@
-# Sidekick Prototype
+# Sidekick
 
 [日本語 README](README.ja.md)
 
@@ -12,7 +12,7 @@ Download the latest DMG from [GitHub Releases](https://github.com/ast-ry/sidekic
 
 [Download Sidekick.dmg](https://github.com/ast-ry/sidekick/releases/latest/download/Sidekick.dmg)
 
-Open the DMG and drag `Sidekick.app` to `Applications`. Sidekick is an early prototype and is currently ad-hoc signed, so macOS may show a security warning on first launch.
+Open the DMG and drag `Sidekick.app` to `Applications`. Sidekick is currently ad-hoc signed, so macOS may show a security warning on first launch.
 
 ## Demo
 
