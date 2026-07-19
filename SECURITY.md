@@ -2,7 +2,14 @@
 
 ## Supported Versions
 
-Security fixes are provided for the latest release only.
+| Version | Supported |
+| --- | --- |
+| `main` | Yes |
+| `v0.1.1` and earlier | No |
+
+The published `v0.1.1` DMG predates the latest security hardening on `main` and
+is not recommended for new installations. This table will be updated when a
+newer build is published.
 
 ## Reporting a Vulnerability
 

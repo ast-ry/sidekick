@@ -2,7 +2,8 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-DMG_PATH="${1:-${ROOT_DIR}/dist/Sidekick.dmg}"
+VERSION="$(/usr/libexec/PlistBuddy -c 'Print :CFBundleShortVersionString' "${ROOT_DIR}/App/Info.plist")"
+DMG_PATH="${1:-${ROOT_DIR}/dist/Sidekick-${VERSION}.dmg}"
 
 if [[ -z "${NOTARY_PROFILE:-}" ]]; then
   echo "NOTARY_PROFILE is required. Create one with 'xcrun notarytool store-credentials'." >&2

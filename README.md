@@ -2,193 +2,167 @@
 
 [日本語 README](README.ja.md)
 
-`Sidekick` is a desktop assistant that responds to what you are currently viewing on your Mac. It can suggest a next step when an error appears, react like someone watching alongside you during a video or game, and continue any interesting response as a chat.
-
-Screen understanding is provided by a local LLM running through LM Studio or another OpenAI-compatible endpoint.
-
-## Download
-
-Download the latest DMG from [GitHub Releases](https://github.com/ast-ry/sidekick/releases/latest), or use the direct download link:
-
-[Download Sidekick.dmg](https://github.com/ast-ry/sidekick/releases/latest/download/Sidekick.dmg)
-
-Open the DMG and drag `Sidekick.app` to `Applications`. Sidekick is currently ad-hoc signed, so macOS may show a security warning on first launch.
-
-## Demo
+`Sidekick` is a desktop assistant that responds to what you are viewing on your Mac. It can suggest a next step when an error appears, react like someone watching alongside you during a video or game, and continue an interesting response as a chat with the current screen context.
 
 ![Sidekick demo animation](docs/assets/sidekick-demo.gif)
 
-Sidekick waits at the edge of the screen, provides a short response that fits the situation, and lets you continue that topic in chat.
+## What It Does
+
+- **Spot blocked work:** Read visible errors or settings and suggest a short next step.
+- **Watch along with you:** Add reactions, relevant context, or small tidbits during videos and games.
+- **Respond only when useful:** Wait quietly when little changes and let you tune response frequency and tone.
+- **Continue in chat:** Open a conversation directly from an overlay response while retaining the current context.
+- **Return to a recent topic:** Browse up to five recent feedback items and resume the selected conversation.
 
 ## How It Works
 
 ```mermaid
 flowchart LR
-    screen["Work, watch, or play<br/>on your Mac"]
-    capture["Sidekick looks at<br/>the current screen"]
-    lmstudio["A local LLM creates<br/>a relevant response"]
-    feedback["A short message appears<br/>at the edge of the screen"]
-    chat["Continue in chat<br/>when you want more"]
-
-    screen --> capture --> lmstudio --> feedback
-    feedback --> chat
-    chat --> lmstudio
+    screen["Mac screen"] --> sidekick["Sidekick<br/>capture and OCR"]
+    sidekick --> endpoint{"Configured API endpoint"}
+    endpoint --> local["LM Studio<br/>on this Mac"]
+    endpoint --> remote["Remote API<br/>HTTPS"]
+    local --> response["Short feedback<br/>or chat"]
+    remote --> response
+    response --> sidekick
+    local -. "Depending on tool and MCP settings" .-> external["External services"]
 ```
 
-With the default setup, screen context is sent to LM Studio running on the same Mac. If you configure a remote API instead, screen information may leave your device.
+By default, screen context is sent to LM Studio on the same Mac. Screen data or derived context may leave the device if you configure a remote API or if LM Studio tools, plugins, or MCP servers use external services.
 
-## What It Does
+## Choose An Installation Method
 
-Here are some typical ways to use it:
+> [!IMPORTANT]
+> Sidekick builds on GitHub Releases are not signed with a Developer ID and are not notarized by Apple. Apple cannot verify the developer, whether the app was modified, or whether it contains known malware. Use a build only when you trust this repository and its distribution source.
 
-- **When work gets stuck:** Sidekick can read visible errors, settings screens, or signs of a blocked workflow and suggest a short next step.
-- **While watching or playing:** It can add reactions, relevant background context, or small tidbits like someone watching alongside you.
-- **While you are focused:** It can wait quietly when little is changing and respond only when something looks worth mentioning.
-- **When you want more detail:** Continue directly from an overlay response into a chat that keeps the current screen context.
-- **When you want to revisit something:** Browse up to five recent feedback items and resume the selected topic.
+The currently published `v0.1.1` DMG is older than `main` and does not include the latest security hardening. **Building from source is currently recommended.** The existing DMG is not recommended for new installations until an updated build is published.
 
-You can tune the experience with `Auto`, `Assist`, `Companion`, and `Silent` modes, as well as tone, response frequency, capture scope, screenshot/OCR input, and output language.
+### A. Build From Source (Recommended)
 
-## Requirements
+Requirements:
 
 - macOS 14 or later
-- Xcode app runtime components installed
-- Screen Recording permission enabled for the built executable
-- LM Studio running with an OpenAI-compatible chat completions endpoint, for example `http://127.0.0.1:1234/v1/chat/completions`
-- Confirmed LM Studio version: `0.4.16+2 (0.4.16+2)`
-- Confirmed local model setup: `Gemma4-26b-a4b` through LM Studio
-
-## LM Studio Setup Example
-
-The confirmed setup uses LM Studio `0.4.16+2 (0.4.16+2)` with `Gemma4-26b-a4b` loaded and the OpenAI-compatible API server running on localhost.
-
-1. Launch LM Studio and download or select `Gemma4-26b-a4b`.
-2. Load the model in LM Studio's local server view.
-3. Start the OpenAI-compatible API server.
-4. Confirm that the server URL is `http://127.0.0.1:1234/v1`.
-5. Confirm that the loaded model can respond with image input. If it does not work, use the script in "LM Studio Troubleshooting" below to check whether `Responses` or `Chat Completions` works in your setup.
-
-Sidekick's default endpoint is `http://127.0.0.1:1234/v1/chat/completions`. If you change the host or port in LM Studio, update `Base URL` in Sidekick to match it.
-
-## Sidekick Settings After Launch
-
-After launching the app, open `Open Settings` from the Sidekick menu bar item, or open the dashboard and configure these fields.
-
-1. Open `Connection`.
-2. Set `Base URL` to the LM Studio endpoint. Usually this is `http://127.0.0.1:1234/v1/chat/completions`.
-3. Set `Model` to the model name loaded in LM Studio. In the confirmed setup, use `Gemma4-26b-a4b`.
-4. Set `API Format` to `Chat` first. If the troubleshooting script shows that only `Responses` works, switch it to `Responses`.
-5. Set `Interface Language` and `Output Language` to `Japanese` or `English` as needed.
-6. Open `Behavior` and set `Analysis Mode` to `Image only` or `OCR + Image`. These are usually the best fit for Gemma VLM setups.
-7. Leave `Capture Scope` as `Entire Display` for the first test. Switch to `Frontmost Window` if you only want Sidekick to see the active app window.
-8. Open `Diagnostics` and click `Capture Screen` to confirm that a preview appears.
-9. Click `Ask Sidekick` and confirm that LM Studio returns a response.
-10. If that works, click `Start Monitoring`.
-
-macOS Screen Recording permission is required on the first capture. After granting permission, relaunch Sidekick and try `Capture Screen` or `Ask Sidekick` again.
-
-## Privacy And Data Handling
-
-Sidekick is screen-aware software. Use it with the same care you would use for screen sharing.
-
-- Captured screenshots and OCR text are sent to the API endpoint configured in the app.
-- The default endpoint is localhost for LM Studio, but changing it to a remote endpoint can send screen contents off-device.
-- Even with a localhost endpoint, LM Studio or the selected model runtime may be configured to call tools, plugins, MCP servers, or other integrations. Those integrations can forward parts of the prompt, OCR text, screenshots, or derived context to external services depending on their configuration.
-- Review and trust your LM Studio tool/MCP/plugin configuration before using Sidekick with sensitive screen contents.
-- Captured screenshots are kept in memory for the current session and recent in-app conversation history. They are not written to a screenshot archive.
-- Recent feedback/chat history is held in memory and is lost when the app quits.
-- Settings and editable prompts are persisted with `UserDefaults`.
-- Logs are written only to `~/Library/Logs/Sidekick/sidekick.log`, with user-only permissions and size-based rotation.
-- Notification previews indicate that feedback is available without displaying model-generated screen content.
-- Avoid using Sidekick on screens containing secrets, credentials, private messages, customer data, or other sensitive information unless you fully trust the configured endpoint.
-
-## Run
+- Xcode or Xcode Command Line Tools
+- Git
+- LM Studio or another OpenAI-compatible API
 
 ```bash
-swift run
-```
-
-On first capture, macOS should prompt for Screen Recording permission. After granting it, relaunch the app and try `Capture Screen`, `Ask Sidekick`, or `Start Monitoring`.
-
-## Build A Simple .app Or Installer DMG
-
-Notifications need the app to run from an `.app` bundle instead of `swift run`. You can create a simple local bundle with:
-
-```bash
+git clone https://github.com/ast-ry/sidekick.git
+cd sidekick
 zsh Scripts/build_app.sh
 open dist/Sidekick.app
 ```
 
-When launched from the `.app`, notification support can be enabled.
+This creates `dist/Sidekick.app`. A local build is also not Developer ID signed or notarized by Apple.
 
-The build script creates `dist/Sidekick.app` inside this repository and ad-hoc signs it for local testing. An ad-hoc build is not notarized and may trigger a Gatekeeper warning. It does not install into `/Applications`; move it manually if you want that.
+### B. Use A GitHub Release DMG
 
-To create a drag-and-drop installer disk image:
+Open [GitHub Releases](https://github.com/ast-ry/sidekick/releases), review the release notes and SHA-256 value, and download the DMG. Open it and drag `Sidekick.app` to `Applications`.
+
+If macOS blocks the app on first launch:
+
+1. Try to open Sidekick once and confirm that macOS shows a warning.
+2. Open `System Settings`.
+3. Open `Privacy & Security`.
+4. Choose `Open Anyway` for Sidekick.
+5. Review the warning and open the app only if you trust it.
+
+See Apple's official guide to [opening an app from an unidentified developer](https://support.apple.com/guide/mac-help/mh40616/mac). Disabling Gatekeeper or using `xattr` to remove quarantine in bulk is not recommended.
+
+Compare the downloaded DMG with the value in its release notes:
 
 ```bash
-zsh Scripts/build_dmg.sh
-open dist/Sidekick.dmg
+shasum -a 256 ~/Downloads/Sidekick*.dmg
 ```
 
-The DMG contains `Sidekick.app` and an `Applications` shortcut. Drag `Sidekick.app` onto `Applications` to install it like a typical macOS app.
+A matching SHA-256 confirms file identity. It is not a substitute for Apple code signing or malware scanning.
 
-## LM Studio Troubleshooting
+## Runtime Requirements
 
-If image input fails, verify LM Studio directly first:
+Both release and source-built versions require:
+
+- macOS 14 or later
+- Screen Recording permission
+- LM Studio or another OpenAI-compatible API
+- Confirmed LM Studio version: `0.4.16+2 (0.4.16+2)`
+- Confirmed model setup: `Gemma4-26b-a4b` through LM Studio
+
+## Prepare LM Studio
+
+1. Launch LM Studio and download or select `Gemma4-26b-a4b`.
+2. Load the model in the local server view.
+3. Start the OpenAI-compatible API server.
+4. Confirm that the server URL is `http://127.0.0.1:1234/v1`.
+5. Confirm that the model can respond to image input.
+
+Sidekick's default endpoint is `http://127.0.0.1:1234/v1/chat/completions`. Plain HTTP is accepted only for localhost and loopback addresses. Remote endpoints must use HTTPS.
+
+## Configure Sidekick
+
+Launch the app and choose `Open Settings` from the menu bar item, or open the dashboard.
+
+1. In `Connection`, set `Base URL` to the LM Studio endpoint.
+2. Set `Model` to the model loaded in LM Studio.
+3. Start with `API Format` set to `Chat`. Switch to `Responses` if that is the only format supported by your setup.
+4. Choose the interface and output languages.
+5. In `Behavior`, choose `Image only` or `OCR + Image` for `Analysis Mode`.
+6. Start with `Capture Scope` set to `Entire Display`. Use `Frontmost Window` to limit capture to the active app.
+7. In `Diagnostics`, use `Capture Screen` and confirm that a preview appears.
+8. Use `Ask Sidekick` and confirm that LM Studio returns a response.
+9. Select `Start Monitoring` when the checks pass.
+
+macOS requests Screen Recording permission on the first capture. Relaunch Sidekick after granting it.
+
+## Privacy And Data Handling
+
+Treat Sidekick with the same care as screen sharing.
+
+- Screenshots and OCR text are sent to the configured API endpoint.
+- A remote endpoint sends screen contents off-device.
+- Even on localhost, LM Studio tools, plugins, MCP servers, or model runtimes may send information externally.
+- Captures are held in memory for the current session and recent conversation context. Sidekick does not create a screenshot archive.
+- Feedback and chat history are lost when the app quits.
+- Settings and edited prompts are persisted with `UserDefaults`.
+- Logs are stored at `~/Library/Logs/Sidekick/sidekick.log` with user-only permissions and size-based rotation.
+- Notification previews do not display model-generated response text.
+- Avoid sensitive screens unless you trust the complete endpoint, model, tool, plugin, and MCP configuration.
+
+## Troubleshooting
+
+### Screen capture does not work
+
+Allow Sidekick under `System Settings` → `Privacy & Security` → `Screen Recording`, then relaunch the app.
+
+### Sidekick cannot reach LM Studio
+
+- Confirm that the LM Studio local server is running.
+- Match Sidekick's `Base URL` to the LM Studio host and port.
+- Use HTTPS for remote endpoints.
+
+### Image input does not work
+
+Test LM Studio separately:
 
 ```bash
 zsh Scripts/test_lmstudio_vision.sh <model-id> <image-path> [base-url]
 ```
 
-Example:
-
-```bash
-zsh Scripts/test_lmstudio_vision.sh google/gemma-3-4b-it ~/Desktop/capture.png http://127.0.0.1:1234/v1
-```
-
-The script checks `GET /models`, `POST /v1/responses`, and `POST /v1/chat/completions`. If only one works, match the app's `API Format` to that endpoint style.
-
-## Notes
-
-- On launch, the app opens into the overlay first, and `Start Monitoring` begins the companion loop.
-- `Start Monitoring` captures on a timer and generates feedback automatically.
-- In overlay mode, you can browse up to five recent feedback items with the arrows beside the primary action button.
-- While browsing an older item, pressing `Chat` resumes that historical conversation in-place.
-- Monitoring feedback can be delivered through either notifications or the overlay. The current primary UX is overlay-first.
-- You can close the dashboard window and keep the app alive in the menu bar.
-- The `x` button in the overlay quits the entire app rather than hiding only the overlay.
-- During monitoring, larger changes lead to more concrete suggestions, while smaller changes lead to brief check-ins.
-- In `Agent Mode = Auto`, the app estimates `State`, `Intent`, and `Response` before deciding whether to speak.
-- `commentary` and `fun_fact` responses are used for co-viewing style reactions and short relevant context or fun tidbits when appropriate.
-- `Agent Mode = Assist`, `Companion`, or `Silent` skips classification and pins the response style.
-- `Tone = casual` with `Companion Style = fun-fact` is the best fit if you want it to feel like a friend watching the screen with you.
-- You can choose `OCR only`, `Image only`, or `OCR + Image`. For VLMs such as Gemma, `Image only` or `OCR + Image` is usually the better fit.
-- You can switch the capture target between the frontmost window and the full display. The default is the full display.
-- `API Format` can be switched between `Chat` and `Responses` for compatibility testing with different LM Studio builds and model wrappers.
-- The current build already includes a menu bar entry so the app can stay around quietly while the dashboard is closed.
-- Markdown-style separators such as `---` are stripped from model replies before rendering.
+The script checks `GET /models`, `POST /v1/responses`, and `POST /v1/chat/completions`. Match Sidekick's `API Format` to a format that works.
 
 ## Development
 
-Build locally:
-
 ```bash
 swift build
+swift test
 ```
 
-GitHub Actions runs the same build on macOS for pushes and pull requests.
+GitHub Actions runs tests for pushes and pull requests. Use `Scripts/build_app.sh` for a local app and `Scripts/build_dmg.sh` for an unnotarized DMG. The DMG filename includes `unnotarized`, and the script also creates a SHA-256 file.
 
-Run the test suite with `swift test`. Sidekick accepts plain HTTP only for loopback addresses such as `localhost` and `127.0.0.1`; remote endpoints must use HTTPS. Notification previews do not contain model responses, and application logs are stored at `~/Library/Logs/Sidekick/sidekick.log` with user-only permissions and size-based rotation.
+`Scripts/build_release.sh` remains available for a future Developer ID signed and notarized release if the project joins the Apple Developer Program. It is not part of the current user distribution path.
 
-Public releases must be signed with a Developer ID Application certificate and notarized. First store App Store Connect credentials with `xcrun notarytool store-credentials`, then run:
+## Security
 
-```bash
-CODESIGN_IDENTITY="Developer ID Application: Example (TEAMID)" \
-NOTARY_PROFILE="sidekick-notary" \
-zsh Scripts/build_release.sh
-```
-
-Signing and notarization credentials must remain in the developer's keychain or CI secrets and must never be committed to the repository.
+Do not report vulnerabilities in a public issue. See [SECURITY.md](SECURITY.md) for the private reporting method and supported versions.
 
 ## License
 
