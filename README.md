@@ -35,9 +35,32 @@ By default, screen context is sent to LM Studio on the same Mac. Screen data or 
 > [!IMPORTANT]
 > Sidekick builds on GitHub Releases are not signed with a Developer ID and are not notarized by Apple. Apple cannot verify the developer, whether the app was modified, or whether it contains known malware. Use a build only when you trust this repository and its distribution source.
 
-The currently published `v0.1.1` DMG is older than `main` and does not include the latest security hardening. **Building from source is currently recommended.** The existing DMG is not recommended for new installations until an updated build is published.
+The current release is [`v0.1.2`](https://github.com/ast-ry/sidekick/releases/tag/v0.1.2). Its DMG includes the latest security and privacy hardening, but it remains ad-hoc signed and unnotarized. Choose the DMG for a simpler installation, or build from source if you want to inspect and compile the code yourself.
 
-### A. Build From Source (Recommended)
+### A. Use The GitHub Release DMG
+
+Open the [`v0.1.2` release](https://github.com/ast-ry/sidekick/releases/tag/v0.1.2), review the release notes, and download both the DMG and its `.sha256` file. Open the DMG and drag `Sidekick.app` to `Applications`.
+
+Verify the downloaded file before opening it:
+
+```bash
+cd ~/Downloads
+shasum -a 256 -c Sidekick-0.1.2-unnotarized.dmg.sha256
+```
+
+If macOS blocks the app on first launch:
+
+1. Try to open Sidekick once and confirm that macOS shows a warning.
+2. Open `System Settings`.
+3. Open `Privacy & Security`.
+4. Choose `Open Anyway` for Sidekick.
+5. Review the warning and open the app only if you trust it.
+
+See Apple's official guide to [opening an app from an unidentified developer](https://support.apple.com/guide/mac-help/mh40616/mac). Disabling Gatekeeper or using `xattr` to remove quarantine in bulk is not recommended.
+
+A matching SHA-256 confirms file identity. It is not a substitute for Apple code signing or malware scanning.
+
+### B. Build From Source
 
 Requirements:
 
@@ -54,28 +77,6 @@ open dist/Sidekick.app
 ```
 
 This creates `dist/Sidekick.app`. A local build is also not Developer ID signed or notarized by Apple.
-
-### B. Use A GitHub Release DMG
-
-Open [GitHub Releases](https://github.com/ast-ry/sidekick/releases), review the release notes and SHA-256 value, and download the DMG. Open it and drag `Sidekick.app` to `Applications`.
-
-If macOS blocks the app on first launch:
-
-1. Try to open Sidekick once and confirm that macOS shows a warning.
-2. Open `System Settings`.
-3. Open `Privacy & Security`.
-4. Choose `Open Anyway` for Sidekick.
-5. Review the warning and open the app only if you trust it.
-
-See Apple's official guide to [opening an app from an unidentified developer](https://support.apple.com/guide/mac-help/mh40616/mac). Disabling Gatekeeper or using `xattr` to remove quarantine in bulk is not recommended.
-
-Compare the downloaded DMG with the value in its release notes:
-
-```bash
-shasum -a 256 ~/Downloads/Sidekick*.dmg
-```
-
-A matching SHA-256 confirms file identity. It is not a substitute for Apple code signing or malware scanning.
 
 ## Runtime Requirements
 

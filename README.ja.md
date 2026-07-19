@@ -35,9 +35,32 @@ flowchart LR
 > [!IMPORTANT]
 > GitHub ReleasesのSidekickは、Developer IDで署名されておらず、Appleの公証も受けていません。Appleは開発元、改変の有無、既知のマルウェアが含まれていないことを検証できません。リポジトリと配布元を信頼できる場合にだけ使用してください。
 
-現在の公開DMG `v0.1.1`は、最新の`main`より古く、直近のセキュリティ修正を含みません。**現時点ではソースからのビルドを推奨します。** 修正版DMGを公開するまでは、既存DMGを新規インストール用途には推奨しません。
+現在のリリースは[`v0.1.2`](https://github.com/ast-ry/sidekick/releases/tag/v0.1.2)です。DMGには最新のセキュリティ・プライバシー対策が含まれますが、アドホック署名でApple未公証である点は変わりません。手軽に導入する場合はDMG、コードを確認して自分でビルドする場合はソースビルドを選んでください。
 
-### A. ソースからビルドする（推奨）
+### A. GitHub ReleasesのDMGを使う
+
+[`v0.1.2`のリリースページ](https://github.com/ast-ry/sidekick/releases/tag/v0.1.2)で説明を確認し、DMGと`.sha256`ファイルの両方をダウンロードします。DMGを開き、`Sidekick.app`を`Applications`へドラッグしてください。
+
+起動する前に、ダウンロードしたファイルを検証します。
+
+```bash
+cd ~/Downloads
+shasum -a 256 -c Sidekick-0.1.2-unnotarized.dmg.sha256
+```
+
+初回起動時にmacOSがアプリをブロックした場合:
+
+1. 一度Sidekickを開き、警告が表示されたことを確認します。
+2. `システム設定`を開きます。
+3. `プライバシーとセキュリティ`を開きます。
+4. Sidekickに対する`このまま開く`を選びます。
+5. 表示内容を確認して起動します。
+
+詳細はApple公式の[未確認の開発元のアプリを開く手順](https://support.apple.com/ja-jp/guide/mac-help/mh40616/mac)を確認してください。Gatekeeper全体の無効化や`xattr`による一括解除は推奨しません。
+
+SHA-256はファイルが一致することを確認するものであり、Appleの署名やマルウェア検査の代わりではありません。
+
+### B. ソースからビルドする
 
 必要なもの:
 
@@ -54,28 +77,6 @@ open dist/Sidekick.app
 ```
 
 `dist/Sidekick.app`が作成されます。このローカルビルドもDeveloper ID署名・Apple公証はされません。
-
-### B. GitHub ReleasesのDMGを使う
-
-[GitHub Releases](https://github.com/ast-ry/sidekick/releases)から、リリースノートとSHA-256を確認してダウンロードしてください。DMGを開き、`Sidekick.app`を`Applications`へドラッグします。
-
-初回起動時にmacOSがアプリをブロックした場合:
-
-1. 一度Sidekickを開き、警告が表示されたことを確認します。
-2. `システム設定`を開きます。
-3. `プライバシーとセキュリティ`を開きます。
-4. Sidekickに対する`このまま開く`を選びます。
-5. 表示内容を確認して起動します。
-
-詳細はApple公式の[未確認の開発元のアプリを開く手順](https://support.apple.com/ja-jp/guide/mac-help/mh40616/mac)を確認してください。Gatekeeper全体の無効化や`xattr`による一括解除は推奨しません。
-
-ダウンロードしたDMGは、リリースノートに記載された値と比較できます。
-
-```bash
-shasum -a 256 ~/Downloads/Sidekick*.dmg
-```
-
-SHA-256はファイルが一致することを確認するものであり、Appleの署名やマルウェア検査の代わりではありません。
 
 ## 必要な実行環境
 

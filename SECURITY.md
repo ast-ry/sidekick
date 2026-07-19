@@ -5,11 +5,11 @@
 | Version | Supported |
 | --- | --- |
 | `main` | Yes |
+| `v0.1.2` | Yes |
 | `v0.1.1` and earlier | No |
 
-The published `v0.1.1` DMG predates the latest security hardening on `main` and
-is not recommended for new installations. This table will be updated when a
-newer build is published.
+Security fixes are provided for `main` and the latest published release. Older
+release builds do not receive fixes and are not recommended for new installations.
 
 ## Reporting a Vulnerability
 
