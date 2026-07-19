@@ -413,7 +413,6 @@ final class SidekickViewModel: ObservableObject {
     var feedbackNotificationHandler: ((FeedbackNotificationPayload) -> Void)?
     var feedbackOverlayHandler: ((FeedbackNotificationPayload) -> Void)?
     var inspectNotificationsHandler: (() -> Void)?
-    private let logStore = LogStore()
     private var settingsCancellables: Set<AnyCancellable> = []
 
     init() {
@@ -503,8 +502,6 @@ final class SidekickViewModel: ObservableObject {
         if lines.count > 120 {
             appLog = lines.suffix(120).joined(separator: "\n")
         }
-
-        logStore.append(line: line)
     }
 
     func uiText(_ japanese: String, _ english: String) -> String {

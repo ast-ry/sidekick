@@ -98,7 +98,8 @@ Sidekick is screen-aware software. Use it with the same care you would use for s
 - Captured screenshots are kept in memory for the current session and recent in-app conversation history. They are not written to a screenshot archive.
 - Recent feedback/chat history is held in memory and is lost when the app quits.
 - Settings and editable prompts are persisted with `UserDefaults`.
-- Logs are written to `~/Library/Logs/Sidekick/sidekick.log` and `/tmp/sidekick.log`.
+- Logs are written only to `~/Library/Logs/Sidekick/sidekick.log`, with user-only permissions and size-based rotation.
+- Notification previews indicate that feedback is available without displaying model-generated screen content.
 - Avoid using Sidekick on screens containing secrets, credentials, private messages, customer data, or other sensitive information unless you fully trust the configured endpoint.
 
 ## Run
@@ -120,7 +121,7 @@ open dist/Sidekick.app
 
 When launched from the `.app`, notification support can be enabled.
 
-The build script creates `dist/Sidekick.app` inside this repository and ad-hoc signs it locally. It does not install into `/Applications`; move it manually if you want that.
+The build script creates `dist/Sidekick.app` inside this repository and ad-hoc signs it for local testing. An ad-hoc build is not notarized and may trigger a Gatekeeper warning. It does not install into `/Applications`; move it manually if you want that.
 
 To create a drag-and-drop installer disk image:
 
@@ -176,6 +177,18 @@ swift build
 ```
 
 GitHub Actions runs the same build on macOS for pushes and pull requests.
+
+Run the test suite with `swift test`. Sidekick accepts plain HTTP only for loopback addresses such as `localhost` and `127.0.0.1`; remote endpoints must use HTTPS. Notification previews do not contain model responses, and application logs are stored at `~/Library/Logs/Sidekick/sidekick.log` with user-only permissions and size-based rotation.
+
+Public releases must be signed with a Developer ID Application certificate and notarized. First store App Store Connect credentials with `xcrun notarytool store-credentials`, then run:
+
+```bash
+CODESIGN_IDENTITY="Developer ID Application: Example (TEAMID)" \
+NOTARY_PROFILE="sidekick-notary" \
+zsh Scripts/build_release.sh
+```
+
+Signing and notarization credentials must remain in the developer's keychain or CI secrets and must never be committed to the repository.
 
 ## License
 

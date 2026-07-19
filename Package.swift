@@ -14,5 +14,10 @@ let package = Package(
             name: "SidekickApp",
             path: "Sources"
         ),
+        .testTarget(
+            name: "SidekickAppTests",
+            dependencies: ["SidekickApp"],
+            path: "Tests"
+        ),
     ]
 )

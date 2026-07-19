@@ -157,12 +157,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCent
     }
 
     @MainActor
-    private func deliverNotification(_ payload: SidekickViewModel.FeedbackNotificationPayload) {
+    private func deliverNotification(_: SidekickViewModel.FeedbackNotificationPayload) {
         let requestID = UUID().uuidString
-        viewModel?.log("Delivering notification: title=\(payload.title) request=\(requestID)")
+        viewModel?.log("Delivering redacted notification. request=\(requestID)")
         let content = UNMutableNotificationContent()
-        content.title = payload.title
-        content.body = payload.body
+        content.title = "Sidekick"
+        content.body = viewModel?.uiText(
+            "新しいフィードバックがあります。Sidekickを開いて確認してください。",
+            "New feedback is available. Open Sidekick to view it."
+        ) ?? "New feedback is available. Open Sidekick to view it."
         content.sound = .default
         content.categoryIdentifier = "SIDEKICK_FEEDBACK"
 
@@ -302,10 +305,22 @@ final class SingleInstanceGuard {
             return true
         }
 
-        let path = "/tmp/sidekick.lock"
-        lockFileDescriptor = open(path, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR)
+        let path = FileManager.default.temporaryDirectory
+            .appendingPathComponent("dev.astry.sidekick.lock")
+            .path
+        lockFileDescriptor = open(
+            path,
+            O_CREAT | O_RDWR | O_CLOEXEC | O_NOFOLLOW,
+            S_IRUSR | S_IWUSR
+        )
 
         guard lockFileDescriptor != -1 else {
+            return true
+        }
+
+        guard fchmod(lockFileDescriptor, S_IRUSR | S_IWUSR) == 0 else {
+            close(lockFileDescriptor)
+            lockFileDescriptor = -1
             return true
         }
 

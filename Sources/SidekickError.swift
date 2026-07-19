@@ -2,6 +2,9 @@ import Foundation
 
 enum SidekickError: LocalizedError {
     case invalidEndpoint
+    case unsupportedEndpointScheme
+    case insecureRemoteEndpoint
+    case endpointCredentialsNotAllowed
     case remoteFailure(String)
     case capturePermissionDenied
     case displayNotFound
@@ -12,6 +15,12 @@ enum SidekickError: LocalizedError {
         switch self {
         case .invalidEndpoint:
             return "LM Studio endpoint URL is invalid."
+        case .unsupportedEndpointScheme:
+            return "The endpoint must use HTTP or HTTPS."
+        case .insecureRemoteEndpoint:
+            return "HTTP is allowed only for localhost. Use HTTPS for remote endpoints."
+        case .endpointCredentialsNotAllowed:
+            return "Do not include credentials in the endpoint URL."
         case .remoteFailure(let body):
             return "LM Studio request failed: \(body)"
         case .capturePermissionDenied:

@@ -11,9 +11,10 @@ struct LMStudioRequest {
 
 final class LMStudioService {
     func send(request: LMStudioRequest) async throws -> String {
-        guard let url = URL(string: normalizedEndpoint(from: request.endpoint, format: request.apiFormat)) else {
-            throw SidekickError.invalidEndpoint
-        }
+        let url = try EndpointSecurityPolicy.validatedURL(
+            from: request.endpoint,
+            format: request.apiFormat
+        )
 
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "POST"
@@ -44,23 +45,6 @@ final class LMStudioService {
                 }.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
                 .nonEmpty
                 ?? "No content returned."
-        }
-    }
-
-    private func normalizedEndpoint(from endpoint: String, format: SidekickViewModel.APIFormat) -> String {
-        switch format {
-        case .chatCompletions:
-            if endpoint.hasSuffix("/v1/chat/completions") { return endpoint }
-            if endpoint.hasSuffix("/v1/responses") {
-                return String(endpoint.dropLast("/responses".count)) + "/chat/completions"
-            }
-            return endpoint
-        case .responses:
-            if endpoint.hasSuffix("/v1/responses") { return endpoint }
-            if endpoint.hasSuffix("/v1/chat/completions") {
-                return String(endpoint.dropLast("/chat/completions".count)) + "/responses"
-            }
-            return endpoint
         }
     }
 
@@ -108,6 +92,83 @@ final class LMStudioService {
             ],
             temperature: 0.2
         )
+    }
+}
+
+enum EndpointSecurityPolicy {
+    static func validatedURL(from endpoint: String, format: SidekickViewModel.APIFormat) throws -> URL {
+        guard var components = URLComponents(string: endpoint),
+              let scheme = components.scheme?.lowercased(),
+              let host = components.host,
+              !host.isEmpty else {
+            throw SidekickError.invalidEndpoint
+        }
+
+        guard scheme == "http" || scheme == "https" else {
+            throw SidekickError.unsupportedEndpointScheme
+        }
+
+        guard components.user == nil, components.password == nil else {
+            throw SidekickError.endpointCredentialsNotAllowed
+        }
+
+        if scheme == "http", !isLoopbackHost(host) {
+            throw SidekickError.insecureRemoteEndpoint
+        }
+
+        components.path = normalizedPath(components.path, format: format)
+        guard let url = components.url else {
+            throw SidekickError.invalidEndpoint
+        }
+        return url
+    }
+
+    private static func normalizedPath(_ path: String, format: SidekickViewModel.APIFormat) -> String {
+        let trimmedPath = path.count > 1 && path.hasSuffix("/") ? String(path.dropLast()) : path
+
+        switch format {
+        case .chatCompletions:
+            if trimmedPath.hasSuffix("/v1/responses") {
+                return String(trimmedPath.dropLast("/responses".count)) + "/chat/completions"
+            }
+            if trimmedPath.isEmpty || trimmedPath == "/" {
+                return "/v1/chat/completions"
+            }
+            if trimmedPath.hasSuffix("/v1") {
+                return trimmedPath + "/chat/completions"
+            }
+            return trimmedPath
+        case .responses:
+            if trimmedPath.hasSuffix("/v1/chat/completions") {
+                return String(trimmedPath.dropLast("/chat/completions".count)) + "/responses"
+            }
+            if trimmedPath.isEmpty || trimmedPath == "/" {
+                return "/v1/responses"
+            }
+            if trimmedPath.hasSuffix("/v1") {
+                return trimmedPath + "/responses"
+            }
+            return trimmedPath
+        }
+    }
+
+    private static func isLoopbackHost(_ host: String) -> Bool {
+        let normalizedHost = host.lowercased().trimmingCharacters(in: CharacterSet(charactersIn: "[]"))
+        if normalizedHost == "localhost" || normalizedHost == "::1" {
+            return true
+        }
+
+        let octets = normalizedHost.split(separator: ".", omittingEmptySubsequences: false)
+        guard octets.count == 4,
+              let firstOctet = Int(octets[0]),
+              firstOctet == 127,
+              octets.allSatisfy({ octet in
+                  guard let value = Int(octet) else { return false }
+                  return (0...255).contains(value)
+              }) else {
+            return false
+        }
+        return true
     }
 }
 
