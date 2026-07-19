@@ -16,18 +16,11 @@ enum ScreenCaptureService {
 
         let cgImage: CGImage
 
-        do {
-            switch scope {
-            case .frontmostWindow:
-                cgImage = try await captureFrontmostWindow(frontmostApplicationPID: frontmostApplicationPID)
-            case .mainDisplay:
-                cgImage = try await captureMainDisplay()
-            }
-        } catch {
-            guard let fallbackImage = CGDisplayCreateImage(CGMainDisplayID()) else {
-                throw error
-            }
-            cgImage = fallbackImage
+        switch scope {
+        case .frontmostWindow:
+            cgImage = try await captureFrontmostWindow(frontmostApplicationPID: frontmostApplicationPID)
+        case .mainDisplay:
+            cgImage = try await captureMainDisplay()
         }
 
         let representation = NSBitmapImageRep(cgImage: cgImage)
